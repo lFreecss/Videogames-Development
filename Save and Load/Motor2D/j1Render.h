@@ -5,6 +5,8 @@
 #include "p2Point.h"
 #include "j1Module.h"
 
+using namespace pugi;
+
 class j1Render : public j1Module
 {
 public:
@@ -13,6 +15,9 @@ public:
 
 	// Destructor
 	virtual ~j1Render();
+
+	//Method to load an xml file (TODO4)
+	bool LoadCamera();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
@@ -45,6 +50,10 @@ public:
 	SDL_Rect		camera;
 	SDL_Rect		viewport;
 	SDL_Color		background;
+
+	//TODO 4
+	xml_document camera_file;
+	xml_node cameraNode;
 };
 
 #endif // __j1RENDER_H__

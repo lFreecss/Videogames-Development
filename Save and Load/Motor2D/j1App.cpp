@@ -273,10 +273,9 @@ const char* j1App::GetOrganization() const
 
 
 // TODO 3: Create a simulation of the xml file to read 
-
-
 // TODO 4: Create a method to actually load an xml file
 // then call all the modules to load themselves
+
 
 // TODO 7: Create a method to save the current state
 

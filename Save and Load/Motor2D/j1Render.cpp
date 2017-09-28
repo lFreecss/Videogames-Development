@@ -4,6 +4,8 @@
 #include "j1Window.h"
 #include "j1Render.h"
 
+using namespace pugi;
+
 #define VSYNC true
 
 j1Render::j1Render() : j1Module()
@@ -18,6 +20,25 @@ j1Render::j1Render() : j1Module()
 // Destructor
 j1Render::~j1Render()
 {}
+
+//Method to load an xml file (TODO4)
+bool j1Render::LoadCamera() {
+	bool ret = true;
+
+	xml_parse_result result = camera_file.load_file("camera.xml");
+
+	if (result == NULL)
+	{
+		LOG("LOAD ERROR", result.description());
+		ret = false;
+	}
+	else 
+	{
+		LOG("LOAD SUCCESS");
+		cameraNode = camera_file.child("camera");
+	}
+	return ret;
+}
 
 // Called before render is available
 bool j1Render::Awake(pugi::xml_node& config)
