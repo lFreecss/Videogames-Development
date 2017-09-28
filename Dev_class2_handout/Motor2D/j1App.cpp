@@ -65,6 +65,7 @@ bool j1App::Awake()
 
 	if (result) {
 		LOG("Correct");
+		branch = config.child("config");
 	}
 	else {
 		LOG("Error");

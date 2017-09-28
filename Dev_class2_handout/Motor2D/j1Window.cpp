@@ -34,31 +34,31 @@ bool j1Window::Awake()
 		//Create window
 		Uint32 flags = SDL_WINDOW_SHOWN;
 
-		width = WIDTH;
-		height = HEIGHT;
-		scale = SCALE;
+		width = App->branch.child("window").attribute("width").as_int();
+		height = App->branch.child("window").attribute("height").as_int();
+		scale = App->branch.child("window").attribute("scale").as_int();
 
-		if(FULLSCREEN)
+		if(App->branch.child("window").attribute("fullscreen").as_bool())
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 
-		if(BORDERLESS)
+		if(App->branch.child("window").attribute("borderless").as_bool())
 		{
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
 
-		if(RESIZABLE)
+		if(App->branch.child("window").attribute("resizable").as_bool())
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
 		}
 
-		if(FULLSCREEN_WINDOW)
+		if(App->branch.child("window").attribute("fullscreen_window").as_bool())
 		{
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(App->branch.child("window").attribute("title").value(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
 		if(window == NULL)
 		{
@@ -73,14 +73,7 @@ bool j1Window::Awake()
 			// TODO 4: Read the title of the app from the XML
 			// and set directly the window title using SetTitle()
 			
-			xml_document doc;
-			xml_node tools = doc.child("config").child("title");
-
-			for (xml_node tool = tools.child("title"); tool; tool = tool.next_sibling("title"))
-			{
-				SetTitle("Title");
-			}
-
+			//SetTitle(App->branch.child("config").child("name").value());
 		}
 	}
 

@@ -70,6 +70,8 @@ public:
 	j1Audio*			audio;
 	j1Scene*			scene;
 
+	xml_node branch;
+
 
 private:
 
