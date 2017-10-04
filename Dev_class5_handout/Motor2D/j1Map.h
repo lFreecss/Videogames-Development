@@ -10,7 +10,7 @@ typedef unsigned int uint;
 
 // TODO 1: Create a struct for the map layer
 struct mapLayer {
-	char* name = nullptr;
+	p2SString name = nullptr;
 	uint width = 0;
 	uint height = 0;
 	uint* data = nullptr;
@@ -65,7 +65,7 @@ struct MapData
 	MapTypes			type;
 	p2List<TileSet*>	tilesets;
 	// TODO 2: Add a list/array of layers to the map!
-	mapLayer* name = new mapLayer[];
+	p2List<mapLayer*> layersList;
 };
 
 // ----------------------------------------------------

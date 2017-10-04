@@ -77,8 +77,15 @@ bool j1Map::CleanUp()
 
 	// TODO 2: clean up all layer data
 	// Remove all layers
-	delete mapData;
+	p2List_item<mapLayer*>* itemList;
+	itemList = data.layersList.start;
 
+	while (itemList != NULL)
+	{
+		RELEASE(itemList->data);
+		itemList = itemList->next;
+	}
+	data.layersList.clear();
 	// Clean up the pugui tree
 	map_file.reset();
 
@@ -127,6 +134,18 @@ bool j1Map::Load(const char* file_name)
 	// TODO 4: Iterate all layers and load each of them
 	// Load layer info ----------------------------------------------
 
+	pugi::xml_node layers;
+	for (layers = map_file.child("map").child("layer"); layers && ret; layers = layers.next_sibling("layer"))
+	{
+		mapLayer* set = new mapLayer();
+
+		if (ret == true)
+		{
+			ret = LoadLayer(layers, set);
+		}
+		data.layersList.add(set); 
+	}
+
 
 	if(ret == true)
 	{
@@ -147,16 +166,16 @@ bool j1Map::Load(const char* file_name)
 
 		// TODO 4: Add info here about your loaded layers
 		// Adapt this vcode with your own variables
-		/*
-		p2List_item<MapLayer*>* item_layer = data.layers.start;
+		
+		p2List_item<mapLayer*>* item_layer = data.layersList.start;
 		while(item_layer != NULL)
 		{
-			MapLayer* l = item_layer->data;
+			mapLayer* l = item_layer->data;
 			LOG("Layer ----");
 			LOG("name: %s", l->name.GetString());
 			LOG("tile width: %d tile height: %d", l->width, l->height);
 			item_layer = item_layer->next;
-		}*/
+		}
 	}
 
 	map_loaded = ret;
@@ -292,6 +311,28 @@ bool j1Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 }
 
 // TODO 3: Create the definition for a function that loads a single layer
-//bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
-//{
-//}
+bool j1Map::LoadLayer(pugi::xml_node& node, mapLayer* layer) {
+
+	bool ret = true;
+	if (node == nullptr) {
+		LOG("Layer could not load");
+	}
+	else {
+		LOG("Layer loaded");
+		layer->name = node.attribute("name").as_string();
+		layer->width = node.attribute("width").as_uint();
+		layer->height = node.attribute("height").as_uint();
+		layer->sizeData = layer->width * layer->height;
+		layer->data = new uint[layer->sizeData];
+
+		memset(layer->data, 0, layer->sizeData);
+
+		int i = 0;
+		for (pugi::xml_node gid = node.child("data").child("tile"); gid ; gid = node.next_sibling("tile")) 
+		{
+			layer->data[i] = gid.attribute("gid").as_uint();
+			i++;
+		}
+	}
+	return ret;
+}
